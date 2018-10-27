@@ -1,0 +1,19 @@
+{
+    "name": "Example Bot",
+    "token": "<your discord bot token here>",
+    "prefix": ":",
+    "triggers":
+    {
+        "youtube": {
+            "command": "youtube",
+            "subcommand": "search",
+            "config": {
+                "key": "<your google API key here>"
+            }
+        }
+    },
+    "aliases":
+    {
+        "yt": "youtube"
+    }
+}

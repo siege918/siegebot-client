@@ -1,0 +1,20 @@
+{
+  "name": "siegebot-client",
+  "version": "0.0.1",
+  "description": "Client for instantiating siegebots",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "siegebot",
+    "client"
+  ],
+  "author": "Siege",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "siegebot-youtube": "siege918/siegebot-youtube#0.0.2"
+  }
+}
