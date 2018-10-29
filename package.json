@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "discord.js": "^11.4.2",
-    "siegebot-youtube": "siege918/siegebot-youtube#0.0.2"
+    "siegebot-youtube": "siege918/siegebot-youtube#stable",
+    "siegebot-quotes": "siege918/siegebot-quotes#stable"
   }
 }

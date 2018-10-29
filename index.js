@@ -3,7 +3,8 @@ const Discord = require('discord.js');
 const fs = require("fs");
 
 var commandList = {
-    "youtube": require("siegebot-youtube")
+    "youtube": require("siegebot-youtube"),
+    "quotes": require("siegebot-quotes")
 }
 
 // Create an instance of a Discord client
