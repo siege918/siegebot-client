@@ -22,7 +22,7 @@ client.on('ready', function() {
     console.log('Bot "' + botname + '" ready');
 });
 
-let config = JSON.parse(fs.readFileSync(botname + ".config.json"));
+var config = JSON.parse(fs.readFileSync(botname + ".config.json"));
 
 function help(message) {
     var content = "**COMMAND LIST**\n";
