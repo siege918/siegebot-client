@@ -24,12 +24,29 @@ client.on('ready', function() {
 
 let config = JSON.parse(fs.readFileSync(botname + ".config.json"));
 
+function help(message) {
+    var content = "**COMMAND LIST**\n";
+
+    for (var trigger in config.triggers){
+        content += "\n**";
+        content += config.prefix;
+        content += trigger;
+        content += "** - ";
+        content += config.triggers[trigger].description;
+    }
+
+    message.channel.send(content);
+}
+
 // Create an event listener for messages
 client.on('message', function(message)
     {
         //Short-circuit if it isn't a command
         if (!message.content.startsWith(config.prefix))
             return;
+
+        if (message.content.startsWith(config.prefix + "help"))
+            return help(message);
 
         for (var trigger in config.triggers)
         {
