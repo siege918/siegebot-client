@@ -4,7 +4,9 @@ const fs = require("fs");
 
 var commandList = {
     "youtube": require("siegebot-youtube"),
-    "quotes": require("siegebot-quotes")
+    "quotes": require("siegebot-quotes"),
+    "http": require("siegebot-http"),
+    "echo": require("siegebot-echo")
 }
 
 // Create an instance of a Discord client
@@ -25,6 +27,10 @@ let config = JSON.parse(fs.readFileSync(botname + ".config.json"));
 // Create an event listener for messages
 client.on('message', function(message)
     {
+        //Short-circuit if it isn't a command
+        if (!message.content.startsWith(config.prefix))
+            return;
+
         for (var trigger in config.triggers)
         {
             if (message.content.startsWith(config.prefix + trigger))
