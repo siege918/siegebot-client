@@ -38,9 +38,31 @@ function help(message) {
     message.channel.send(content);
 }
 
+function run(current, message)
+{
+    var command = current.command;
+    var subcommand = current.subcommand;
+    var commandConfig = current.config;
+    
+    commandList[command][subcommand](message, commandConfig)
+    .then(
+        function(response) { }
+    ).catch(function(error) {
+        console.log(error);
+    });
+}
+
 // Create an event listener for messages
 client.on('message', function(message)
     {
+        if (message.isMentioned(message.client.user) && config.mention)
+        {
+            var current = config.mention;
+            run(current, message);
+
+            return;
+        }
+
         //Short-circuit if it isn't a command
         if (!message.content.startsWith(config.prefix))
             return;
@@ -53,16 +75,7 @@ client.on('message', function(message)
             if (message.content.startsWith(config.prefix + trigger))
             {
                 var current = config.triggers[trigger];
-                var command = current.command;
-                var subcommand = current.subcommand;
-                var commandConfig = current.config;
-
-                commandList[command][subcommand](message, commandConfig)
-                .then(
-                    function(response) { }
-                ).catch(function(error) {
-                    console.log(error);
-                });
+                run(current, message);
 
                 return;
             }
@@ -73,16 +86,7 @@ client.on('message', function(message)
             if (message.content.startsWith(config.prefix + alias))
             {
                 var current = config.triggers[config.aliases[alias]];
-                var command = current.command;
-                var subcommand = current.subcommand;
-                var commandConfig = current.config;
-
-                commandList[command][subcommand](message, commandConfig)
-                .then(
-                    function(message) { }
-                ).catch(function(error) {
-                    console.log(error);
-                });
+                run(current, message);
 
                 return;
             }
