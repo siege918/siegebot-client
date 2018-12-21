@@ -6,7 +6,8 @@ var commandList = {
     "youtube": require("siegebot-youtube"),
     "quotes": require("siegebot-quotes"),
     "http": require("siegebot-http"),
-    "echo": require("siegebot-echo")
+    "echo": require("siegebot-echo"),
+	"wordpress": require("siegebot-wordpress")
 }
 
 // Create an instance of a Discord client

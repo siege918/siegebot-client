@@ -18,6 +18,7 @@
     "siegebot-youtube": "siege918/siegebot-youtube#stable",
     "siegebot-quotes": "siege918/siegebot-quotes#stable",
     "siegebot-http": "siege918/siegebot-http#0.0.2",
-    "siegebot-echo": "siege918/siegebot-echo"
+    "siegebot-echo": "siege918/siegebot-echo",
+    "siegebot-wordpress": "siege918/siegebot-wordpress"
   }
 }
