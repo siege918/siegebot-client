@@ -2,6 +2,10 @@
     "name": "Example Bot",
     "token": "<your discord bot token here>",
     "prefix": ":",
+	"commands": 
+	{
+		"youtube": "siegebot-youtube"
+	},
     "triggers":
     {
         "youtube": {

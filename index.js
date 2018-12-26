@@ -6,7 +6,7 @@ var commandList = {
     "youtube": require("siegebot-youtube"),
     "quotes": require("siegebot-quotes"),
     "http": require("siegebot-http"),
-    "echo": require("siegebot-echo"),
+	"echo": require("siegebot-http"),
 	"wordpress": require("siegebot-wordpress")
 }
 
@@ -24,6 +24,14 @@ client.on('ready', function() {
 });
 
 var config = JSON.parse(fs.readFileSync(botname + ".config.json"));
+
+if (config.commands)
+{
+	for (var comm in config.commands)
+	{
+		commandList[comm] = require(config.commands[comm]);
+	}
+}
 
 function help(message) {
     var content = "**COMMAND LIST**\n";
