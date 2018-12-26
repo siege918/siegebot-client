@@ -39,8 +39,127 @@ function help(message) {
     message.channel.send(content);
 }
 
+function checkWhitelistRegex(regexString, text)
+{
+	var whitelistRegex = new RegExp(regexString, "i");
+	return whitelistRegex.test(text);
+}
+
+function checkChannelWhitelist(current, message) 
+{
+	if (!current.whitelist && !current.whitelistRegex)
+		return true;
+	
+	if (current.whitelist && current.whitelist.includes(message.channel.id))
+		return true;
+	
+	if (current.whitelistRegex)
+	{
+		if (!Array.isArray(current.whitelistRegex))
+			current.whitelistRegex = [current.whitelistRegex];
+		
+		for (var i = 0; i < current.whitelistRegex.length; i++)
+		{
+			if (checkWhitelistRegex(current.whitelistRegex, message.channel.name))
+				return true;
+		}
+	}
+	
+	return false;
+}
+
+function checkChannelBlacklist(current, message)
+{
+	if (current.blacklist && !current.blacklistRegex)
+		return true;
+	
+	if (current.blacklist && current.blacklist.includes(message.channel.id))
+		return false;
+	
+	if (current.blacklistRegex)
+	{
+		if (!Array.isArray(current.blacklistRegex))
+			current.blacklistRegex = [current.blacklistRegex];
+		
+		for (var i = 0; i < current.blacklistRegex.length; i++)
+		{
+			if (checkWhitelistRegex(current.blacklistRegex, message.channel.name))
+				return false;
+		}
+	}
+	
+	return true;
+}
+
+function checkRoleWhitelist(current, message)
+{
+	if (!current.roleWhitelist && !current.roleWhitelistRegex)
+		return true;
+	
+	if (!message.member)
+		return false;
+	
+	if (current.roleWhitelist && message.member.roles.some(function(el) { current.roleWhitelist.includes(el.name); } ))
+		return true;
+	
+	if (current.roleWhitelistRegex)
+	{
+		if (!Array.isArray(current.roleWhitelistRegex))
+			current.roleWhitelistRegex = [current.roleWhitelistRegex];
+		
+		for (var i = 0; i < current.roleWhitelistRegex.length; i++)
+		{
+			if (message.member.roles.some(function (el) { return checkWhitelistRegex(current.roleWhitelistRegex, el.name); }))
+				return true;
+		}
+	}
+	
+	return false;
+}
+
+function checkRoleBlacklist(current, message)
+{
+	if (!current.roleBlacklist && !current.roleBlacklistRegex)
+		return true;
+	
+	if (!message.member)
+		return false;
+	
+	if (current.roleBlacklist)
+	{
+		if (message.member.roles.some(function(el) { current.roleBlacklist.includes(el.name); } ))
+			return false;
+	}
+	
+	if (current.roleBlacklistRegex)
+	{
+		if (!Array.isArray(current.roleBlacklistRegex))
+			current.roleBlacklistRegex = [current.roleBlacklistRegex];
+		
+		for (var i = 0; i < current.roleBlacklistRegex.length; i++)
+		{
+			if (message.member.roles.some(function (el) { return checkWhitelistRegex(current.roleBlacklistRegex, el.name); }))
+				return false;
+		}
+	}
+	
+	return true;
+}
+
+
+function authenticate(current, message)
+{
+	return checkChannelWhitelist(current, message)
+		&& checkChannelBlacklist(current, message)
+		&& checkRoleWhitelist(current, message)
+		&& checkRoleBlacklist(current, message);
+}
+
 function run(current, message)
 {
+	if (!authenticate(current, message))
+		return;
+	
     var command = current.command;
     var subcommand = current.subcommand;
     var commandConfig = current.config;
