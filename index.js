@@ -2,14 +2,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-var commandList = {
-  youtube: require('siegebot-youtube'),
-  quotes: require('siegebot-quotes'),
-  http: require('siegebot-http'),
-  echo: require('siegebot-http'),
-  wordpress: require('siegebot-wordpress'),
-};
-
 function help(message) {
   var content = '**COMMAND LIST**\n';
 
@@ -137,7 +129,7 @@ function authenticate(current, message) {
   );
 }
 
-function run(current, message) {
+function run(current, message, commandList) {
   if (!authenticate(current, message)) return;
 
   var command = current.command;
@@ -151,7 +143,7 @@ function run(current, message) {
     });
 }
 
-function activate(botname) {
+function activate(botname, moduleRef) {
   // Create an instance of a Discord client
   const client = new Discord.Client();
 
@@ -165,17 +157,29 @@ function activate(botname) {
 
   var config = JSON.parse(fs.readFileSync(botname + '.config.json'));
 
-  if (config.commands) {
-    for (var comm in config.commands) {
-      commandList[comm] = require(config.commands[comm]);
+  var commandList = {};
+  var importErrors = [];
+
+  for (var comm in config.commands) {
+    try {
+      commandList[comm] = moduleRef.require(config.commands[comm]);
+    } catch (error) {
+      importErrors.push("The module '" + config.commands[comm] + "' is listed in your config but cannot be found. Please install this module before running.");
     }
+  }
+
+  if (importErrors.length > 0) {
+    for (var i = 0; i < importErrors.length; i++) {
+      console.log(importErrors[i]);
+    }
+    return;
   }
 
   // Create an event listener for messages
   client.on('message', function(message) {
     if (message.isMentioned(message.client.user) && config.mention) {
       var current = config.mention;
-      run(current, message);
+      run(current, message, commandList);
 
       return;
     }
@@ -189,7 +193,7 @@ function activate(botname) {
     for (var trigger in config.triggers) {
       if (message.content.startsWith(config.prefix + trigger)) {
         var current = config.triggers[trigger];
-        run(current, message);
+        run(current, message, commandList);
 
         return;
       }
@@ -198,7 +202,7 @@ function activate(botname) {
     for (var alias in config.aliases) {
       if (message.content.startsWith(config.prefix + alias)) {
         var current = config.triggers[config.aliases[alias]];
-        run(current, message);
+        run(current, message, commandList);
 
         return;
       }
@@ -211,9 +215,9 @@ function activate(botname) {
 
 if (require.main === module) {
   var botname = process.argv[2];
-  activate(botname);
+  activate(botname, module);
 }
 
 module.exports = {
-  activate: activate,
+  activate: (botname) => activate(botname, module.parent),
 };
