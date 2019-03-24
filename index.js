@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-function help(message) {
+function help(message, config) {
   var content = '**COMMAND LIST**\n';
 
   for (var trigger in config.triggers) {
@@ -188,7 +188,7 @@ function activate(botname, moduleRef) {
     if (!message.content.startsWith(config.prefix)) return;
 
     if (message.content.startsWith(config.prefix + 'help'))
-      return help(message);
+      return help(message, config);
 
     for (var trigger in config.triggers) {
       if (message.content.startsWith(config.prefix + trigger)) {
