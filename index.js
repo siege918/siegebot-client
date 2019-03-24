@@ -209,8 +209,14 @@ function activate(botname, moduleRef) {
     }
   });
 
+
+  var token = config.token;
+  if (config.tokenEnv && process.env[config.tokenEnv]) {
+    token = process.env[config.tokenEnv];
+  }
+
   // Log our bot in using the token from https://discordapp.com/developers/applications/me
-  client.login(config.token);
+  client.login(token);
 }
 
 if (require.main === module) {
