@@ -209,6 +209,7 @@ function activate(botname, moduleRef) {
     }
   });
 
+  client.on("error", console.error);
 
   var token = config.token;
   if (config.tokenEnv && process.env[config.tokenEnv]) {
