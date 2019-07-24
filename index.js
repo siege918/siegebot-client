@@ -135,7 +135,7 @@ function run(current, message, commandList) {
   var command = current.command;
   var subcommand = current.subcommand;
   var commandConfig = current.config;
-
+  https://lifehacker.com/
   commandList[command][subcommand](message, commandConfig)
     .then(function(response) {})
     .catch(function(error) {
@@ -143,7 +143,7 @@ function run(current, message, commandList) {
     });
 }
 
-function activate(botname, moduleRef) {
+function activateWithConfig(config, moduleRef) {
   // Create an instance of a Discord client
   const client = new Discord.Client();
 
@@ -152,10 +152,8 @@ function activate(botname, moduleRef) {
    * received from Discord
    */
   client.on('ready', function() {
-    console.log('Bot "' + botname + '" ready');
+    console.log('Bot "' + config.name + '" ready');
   });
-
-  var config = JSON.parse(fs.readFileSync(botname + '.config.json'));
 
   var commandList = {};
   var importErrors = [];
@@ -220,6 +218,12 @@ function activate(botname, moduleRef) {
   client.login(token);
 }
 
+function activate(botname, moduleRef) {
+  var config = JSON.parse(fs.readFileSync(botname + '.config.json'));
+
+  activateWithConfig(config, moduleRef);
+}
+
 if (require.main === module) {
   var botname = process.argv[2];
   activate(botname, module);
@@ -227,4 +231,5 @@ if (require.main === module) {
 
 module.exports = {
   activate: (botname) => activate(botname, module.parent),
+  activateWithConfig: (config) => activate(config, module.parent),
 };
