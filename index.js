@@ -2,6 +2,8 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
+var client;
+
 function help(message, config) {
   var content = '**COMMAND LIST**\n';
 
@@ -145,7 +147,7 @@ function run(current, message, commandList) {
 
 function activateWithConfig(config, moduleRef) {
   // Create an instance of a Discord client
-  const client = new Discord.Client();
+  client = new Discord.Client();
 
   /**
    * The ready event is vital, it means that only _after_ this will your bot start reacting to information
@@ -232,4 +234,5 @@ if (require.main === module) {
 module.exports = {
   activate: (botname) => activate(botname, module.parent),
   activateWithConfig: (config) => activate(config, module.parent),
+  getDiscordJSClient: () => { return client; }
 };
