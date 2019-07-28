@@ -233,6 +233,6 @@ if (require.main === module) {
 
 module.exports = {
   activate: (botname) => activate(botname, module.parent),
-  activateWithConfig: (config) => activate(config, module.parent),
+  activateWithConfig: (config) => activateWithConfig(config, module.parent),
   getDiscordJSClient: () => { return client; }
 };
