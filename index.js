@@ -164,7 +164,17 @@ function activateWithConfig(config, moduleRef) {
     try {
       commandList[comm] = moduleRef.require(config.commands[comm]);
     } catch (error) {
+      console.error(error);
       importErrors.push("The module '" + config.commands[comm] + "' is listed in your config but cannot be found. Please install this module before running.");
+    }
+
+    if (commandList[comm].siegebotInit) {
+      try {
+        commandList[comm].siegebotInit(client);
+      } catch (error) {
+        console.error(error);
+        importErrors.push("The module '" + config.commands[comm] + "' contains an export named 'siegebotInit' but was not able to be called correctly.");
+      }
     }
   }
 
