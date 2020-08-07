@@ -137,7 +137,6 @@ function run(current, message, commandList) {
   var command = current.command;
   var subcommand = current.subcommand;
   var commandConfig = current.config;
-  https://lifehacker.com/
   commandList[command][subcommand](message, commandConfig)
     .then(function(response) {})
     .catch(function(error) {
